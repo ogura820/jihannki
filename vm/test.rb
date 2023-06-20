@@ -34,11 +34,11 @@ class VendingMachine
   def sell(drinks)
     case drinks
       when :cola  
-        sell_cola
+        sell_(@cola)
       when :water  
-        sell_water
+        sell_(@water)
       when :red_bull  
-        sell_red_bull
+        sell_(@red_bull)
       else
         puts "cola、water、red_bull のみ選択可能です。"
     end
@@ -74,47 +74,20 @@ class VendingMachine
     @slot_money -= drink[:price]
   end
 
-  def sell_cola
-      #在庫が0の場合
-      if there_is_no_stock_of(@cola)
-        "売り切れ"
-      #投入金額が足りない場合 
-      elsif  there_is_not_enough_money_to_buy(@cola)
-        "お金を入れて"
-      else
-      #投入金額も在庫の条件も十分な場合 
-      #ジュースの在庫を減らし、売り上げ金額を増やし、投入金額合計を減らす
-        reduce_stock_of(@cola)
-        increase_sales_and_reduce_slots_money_amount_of(@cola)
-        return_money
-        return @cola[:name]  # 追記
-      end
-  end
-
-  def sell_water
-    if there_is_no_stock_of(@water)
+  def sell_(drink)
+    if there_is_no_stock_of(drink)
       "売り切れ"
-    elsif  there_is_not_enough_money_to_buy(@water)
+    #投入金額が足りない場合 
+    elsif  there_is_not_enough_money_to_buy(drink)
       "お金を入れて"
     else
-      reduce_stock_of(@water)
-      increase_sales_and_reduce_slots_money_amount_of(@water)
+    #投入金額も在庫の条件も十分な場合 
+    #ジュースの在庫を減らし、売り上げ金額を増やし、投入金額合計を減らす
+      reduce_stock_of(drink)
+      increase_sales_and_reduce_slots_money_amount_of(drink)
       return_money
-      return @water[:name]  
-      end
+      return drink[:name]  # 追記
+    end
   end
-
-  def sell_red_bull
-    if there_is_no_stock_of(@red_bull)
-      "売り切れ"
-    elsif  there_is_not_enough_money_to_buy(@red_bull)
-      "お金を入れて"
-    else
-      reduce_stock_of(@red_bull)
-      increase_sales_and_reduce_slots_money_amount_of(@water)
-      return_money
-      return @red_bull[:name]  
-      end
-  end
-
+  
 end
