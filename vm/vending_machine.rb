@@ -121,8 +121,8 @@ class VendingMachine
 # 要件外　新しいジュースの種類の補充
   def replenished(drink_name,drink_price,drink_stock)
     drink_name = {}
-    drink_name [price] = drink_price
-    drink_name [stock] = drink_stock
+    drink_name ["price"] = drink_price
+    drink_name ["stock"] = drink_stock
     drinks = {}
     drinks [drink_nmae] = drink_
     #drink_types = {name: drink_name, price: drink_price, stock: drink_stock}
@@ -133,5 +133,7 @@ class VendingMachine
     @tea = {price: 150, stock: 5 }  
   end
 end
+
+
 
 #http://devtesting.jp/tddbc/?TDDBC%E5%A4%A7%E9%98%AA3.0%2F%E8%AA%B2%E9%A1%8C
