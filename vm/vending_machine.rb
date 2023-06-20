@@ -108,7 +108,7 @@ class VendingMachine
   end
 
 # ステップ４　投入金額、在庫の点で購入可能なドリンクのリストを取得
-  def inform_buyable_drinksgit
+  def inform_buyable_drinks
     buyable_drinks = @drinks.map do |drink|
       if (drink[:price] < @slot_money) && (drink[:stock] > 0)
         "#{drink[:name]}"
