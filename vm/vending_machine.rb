@@ -104,17 +104,17 @@ class VendingMachine
 
   # 売上計算
   def calculate_sales
-    return @sales
+    "売上金額は#{@sales}円です。" 
   end
 
 # ステップ４　投入金額、在庫の点で購入可能なドリンクのリストを取得
   def inform_buyable_drinks
     buyable_drinks = @drinks.map do |drink|
-      if (drink[:price] < @slot_money) && (drink[:stock] > 0)
+      if (drink[:price] <= @slot_money) && (drink[:stock] > 0)
         "#{drink[:name]}"
       end
     end
-    p buyable_drinks.compact
+    buyable_drinks.compact
   end
 
 
