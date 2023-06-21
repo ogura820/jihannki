@@ -1,15 +1,35 @@
 class VendingMachine
-include VendingMachine_Money_function
+
+  MONEY = [10, 50, 100, 500, 1000].freeze
 
   def initialize
+    @slot_money = 0
     @cola = {name: "コーラ", price: 120, stock: 5 }
     @water = {name: "水", price: 100, stock: 5 }
     @red_bull = {name: "レッドブル",price: 200, stock: 5 }
     @drinks = [@cola, @water, @red_bull]
+    @sales = 0
   end
 
   def inform_drink_types
     @drinks
+  end
+
+  def current_slot_money
+    "投入合計金額は#{@slot_money}円です"
+  end
+
+  #自販機は入れられる側なので名称を受動態っぽく変更
+  def sloted_money(money)
+    return "対応していないものです" unless MONEY.include?(money)
+    @slot_money += money
+    "#{money}円追加され、投入金額合計は#{@slot_money}円になりました"
+  end
+
+  def return_money
+    puts "#{@slot_money}円のお釣りです"
+    @slot_money = 0
+    "投入金額は#{@slot_money}円になりました"
   end
 
   def sell(drinks)
@@ -25,9 +45,13 @@ include VendingMachine_Money_function
     end
   end
 
+  def calculate_sales
+    "売上金額は#{@sales}円です。" 
+  end
+
   def inform_buyable_drinks
     buyable_drinks = @drinks.map do |drink|
-        "#{drink[:name]}" unless there_is_not_enough_money_to_buy(drink) && there_is_no_stock_of(drink)
+        "#{drink[:name]}" unless there_is_not_enough_money_to_buy(drink) or there_is_no_stock_of(drink)
     end
     buyable_drinks.compact
   end
@@ -67,32 +91,19 @@ include VendingMachine_Money_function
 
 end
 
-module VendingMachine_Money_function 
-  MONEY = [10, 50, 100, 500, 1000].freeze
+class User < VendingMachine
 
-  def initialize
-    @slot_money = 0
-    @sales = 0
-  end
-
-  def current_slot_money
-    "投入合計金額は#{@slot_money}円です"
+  def initialize(money)
+    @have_money = money
+    vm = VendingMachine.new
   end
 
   def slot_money(money)
-    return "対応していないものです" unless MONEY.include?(money)
-    @slot_money += money
-    "#{money}円追加され、投入金額合計は#{@slot_money}円になりました"
+    vm.sloted_money(money)
+    @have_money -= money
   end
 
-  def return_money
-    puts "#{@slot_money}円のお釣りです"
-    @slot_money = 0
-    "投入金額は#{@slot_money}円になりました"
+  def choose(drink)
+    vm.sell(drink)
   end
-
-  def calculate_sales
-    "売上金額は#{@sales}円です。" 
-  end
-
 end
