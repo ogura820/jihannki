@@ -1,3 +1,31 @@
+class User
+
+  def initialize
+    @vm = VendingMachine.new
+  end
+
+  def slot_money(money)
+    @vm.sloted_money(money)
+  end
+
+  def receive_money
+    @vm.return_money
+  end
+
+  def check_buyable_drinks
+    @vm.inform_buyable_drinks
+  end
+
+  def check_drink_types
+    @vm.inform_drink_types
+  end
+
+  def choose(drink)
+    @vm.sell(drink)
+  end
+
+end
+
 class VendingMachine
 
   MONEY = [10, 50, 100, 500, 1000].freeze
@@ -89,21 +117,4 @@ class VendingMachine
     end
   end
 
-end
-
-class User < VendingMachine
-
-  def initialize(money)
-    @have_money = money
-    vm = VendingMachine.new
-  end
-
-  def slot_money(money)
-    vm.sloted_money(money)
-    @have_money -= money
-  end
-
-  def choose(drink)
-    vm.sell(drink)
-  end
 end
