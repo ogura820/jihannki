@@ -26,17 +26,36 @@ class User
 
 end
 
+
+module Stock
+  def initialize
+    @cola = {name: "コーラ", price: 120, stock: 5 }
+    @water = {name: "水", price: 100, stock: 5 }
+    @red_bull = {name: "レッドブル",price: 200, stock: 5 }
+    @drinks = [@cola, @water, @red_bull]
+  end
+
+  def check_availability_of_(drink)
+    drink[:stock] == 0
+  end
+
+  def reduce_from_(drink)
+    drink[:stock] -= 1
+  end
+end
+
 class VendingMachine
+  include Stock
 
   MONEY = [10, 50, 100, 500, 1000].freeze
 
   def initialize
     @slot_money = 0
+    @sales = 0
     @cola = {name: "コーラ", price: 120, stock: 5 }
     @water = {name: "水", price: 100, stock: 5 }
     @red_bull = {name: "レッドブル",price: 200, stock: 5 }
     @drinks = [@cola, @water, @red_bull]
-    @sales = 0
   end
 
   def inform_drink_types
@@ -79,23 +98,15 @@ class VendingMachine
 
   def inform_buyable_drinks
     buyable_drinks = @drinks.map do |drink|
-        "#{drink[:name]}" unless there_is_not_enough_money_to_buy(drink) or there_is_no_stock_of(drink)
+        "#{drink[:name]}" unless there_is_not_enough_money_to_buy(drink) or check_availability_of_(drink)
     end
     buyable_drinks.compact
   end
 
   private
-
-  def there_is_no_stock_of(drink)
-    drink[:stock] == 0
-  end
   
   def there_is_not_enough_money_to_buy(drink)
     drink[:price] >= @slot_money
-  end
-
-  def reduce_stock_of(drink)
-    drink[:stock] -= 1
   end
 
   def increase_sales_and_reduce_slots_money_amount_of(drink)
@@ -104,13 +115,13 @@ class VendingMachine
   end
 
   def sell_(drink)
-    if there_is_no_stock_of(drink)
+    if check_availability_of_(drink)
       "売り切れ"
     #投入金額が足りない場合 
     elsif  there_is_not_enough_money_to_buy(drink)
       "お金を入れて"
     else
-      reduce_stock_of(drink)
+      reduce_from_(drink)
       increase_sales_and_reduce_slots_money_amount_of(drink)
       return_money
       return drink[:name]  # 追記
