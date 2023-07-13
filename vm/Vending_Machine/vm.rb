@@ -1,7 +1,7 @@
 require './drink_class.rb'
 require './money_class.rb'
 
-class VendingMachine
+class Function
   def initialize
     @drink = Drink.new
     @money = Money.new
@@ -51,5 +51,5 @@ class VendingMachine
 
 end
 
-vm = VendingMachine.new
+vm = Function.new
 vm.start_operation
