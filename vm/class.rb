@@ -27,14 +27,7 @@ class User
 end
 
 
-module Stock
-  def initialize
-    @cola = {name: "コーラ", price: 120, stock: 5 }
-    @water = {name: "水", price: 100, stock: 5 }
-    @red_bull = {name: "レッドブル",price: 200, stock: 5 }
-    @drinks = [@cola, @water, @red_bull]
-  end
-
+module StockOperation
   def check_availability_of_(drink)
     drink[:stock] == 0
   end
@@ -44,14 +37,9 @@ module Stock
   end
 end
 
-class VendingMachine
-  include Stock
-
-  MONEY = [10, 50, 100, 500, 1000].freeze
+class Product
 
   def initialize
-    @slot_money = 0
-    @sales = 0
     @cola = {name: "コーラ", price: 120, stock: 5 }
     @water = {name: "水", price: 100, stock: 5 }
     @red_bull = {name: "レッドブル",price: 200, stock: 5 }
@@ -60,6 +48,27 @@ class VendingMachine
 
   def inform_drink_types
     @drinks
+  end
+
+
+  def inform_buyable_drinks
+    buyable_drinks = @drinks.map do |drink|
+        "#{drink[:name]}" unless there_is_not_enough_money_to_buy(drink) or check_availability_of_(drink)
+    end
+    buyable_drinks.compact
+  end
+
+end
+
+class VendingMachine
+  include StockOperation
+
+  MONEY = [10, 50, 100, 500, 1000].freeze
+
+  def initialize
+    @slot_money = 0
+    @sales = 0
+    @product = Product.new
   end
 
   def current_slot_money
@@ -94,13 +103,6 @@ class VendingMachine
 
   def calculate_sales
     "売上金額は#{@sales}円です。" 
-  end
-
-  def inform_buyable_drinks
-    buyable_drinks = @drinks.map do |drink|
-        "#{drink[:name]}" unless there_is_not_enough_money_to_buy(drink) or check_availability_of_(drink)
-    end
-    buyable_drinks.compact
   end
 
   private
