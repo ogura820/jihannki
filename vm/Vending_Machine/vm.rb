@@ -3,8 +3,6 @@ require './money_class.rb'
 
 class VendingMachine
   def initialize
-    @slot_money = 0
-    @sales = 0
     @drink = Drink.new
     @money = Money.new
   end

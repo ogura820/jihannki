@@ -4,6 +4,7 @@ class Money
   MONEY = [10, 50, 100, 500, 1000].freeze
   attr_accessor  :slot_money
   attr_accessor  :sales
+  
   def initialize
     @slot_money = 0
     @sales = 0
